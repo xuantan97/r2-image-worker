@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { cache } from 'hono/cache'
+import { cors } from 'hono/cors'
 import { sha256 } from 'hono/utils/crypto'
 import { basicAuth } from 'hono/basic-auth'
 import { detectType } from './utils'
@@ -17,6 +18,18 @@ interface Data {
 const maxAge = 60 * 60 * 24 * 30
 
 const app = new Hono<Env>()
+
+app.use(
+  '/*',
+  cors({
+    origin: '*',
+    allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
+    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    exposeHeaders: ['Content-Length'],
+    maxAge: 600,
+    credentials: true,
+  })
+)
 
 // app.put('/upload', async (c, next) => {
 //   const auth = basicAuth({ username: c.env.USER, password: c.env.PASS })
