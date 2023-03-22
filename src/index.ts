@@ -18,12 +18,12 @@ const maxAge = 60 * 60 * 24 * 30
 
 const app = new Hono<Env>()
 
-app.put('/upload', async (c, next) => {
-  const auth = basicAuth({ username: c.env.USER, password: c.env.PASS })
-  await auth(c, next)
-})
+// app.put('/upload', async (c, next) => {
+//   const auth = basicAuth({ username: c.env.USER, password: c.env.PASS })
+//   await auth(c, next)
+// })
 
-app.put('/upload', async (c) => {
+app.post('/upload', async (c) => {
   const data = await c.req.json<Data>()
   const base64 = data.body
   if (!base64) return c.notFound()
